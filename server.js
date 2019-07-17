@@ -4,9 +4,6 @@ const morgan = require('morgan');
 const wagner = require('wagner-core');
 const path = require('path');
 
-const _config = require('./_config');
-const expressJWT = require('express-jwt');
-
 let app = express();
 
 require('./models/models')(wagner);
@@ -25,26 +22,8 @@ app.use(function(req, res, next) {
     next();
 });
 
-const urlBase = "/api/eje02/";
+const urlBase = "/api/v1/";
 
-const jwtOptions = {
-path: [/^\/api\/eje02\/productos\//]
-};
-
-app.use(expressJWT({secret:_config.SECRETJWT}).unless(jwtOptions)); //restric
-
-app.use(function(err, req, res, next){
-    if(err.name=== 'UnauthorizedError'){
-        res.status(err,status).send({
-            code: err.status,
-            message: err.message,
-            details: err.code
-        });
-    }
-    else{
-        next();
-    }
-});
 
 app.use(urlBase+'products',product);
 
