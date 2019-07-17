@@ -17,9 +17,44 @@ const createProduct = (req, res) => {
             res.json({msg:"ERROR EN PRODUCTO ", err:err});
         })
 }
+
+const findAll=(req,res)=>{
+    _product.find()
+        .then((data)=>{
+            if(data.length==0){
+                res.status(status.NO_CONTENT);
+                res.json({msg:"No se encontraron marcas"});
+            }else{
+                res.status(status.OK);
+                res.json({msg:"Éxito!!",data:data});
+            }
+        })
+        .catch((err)=>{
+            res.status(status.BAD_REQUEST);
+            res.json({msg:"Error"});
+        });
+}
+
+const deleteByI=(req,res)=>{
+    const {id}=req.params;
+    _product.findByIdAndRemove({_id:id})
+        .then((data)=>{        
+            res.status(status.OK);
+            res.json({msg:"Éxito!!",data:data});
+        })
+        .catch((err)=>{
+            res.status(status.BAD_REQUEST);
+            res.json({msg:err});
+        });
+
+}
+
+
 module.exports = (Product) => {
     _product = Product;
     return({
         createProduct,
+        findAll,
+        deleteByI
     });
 }
